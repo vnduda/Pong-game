@@ -1,6 +1,9 @@
 # Pong-game
 Curso do jogo Pong pelo site (https://courses.edx.org/courses/course-v1:HarvardX+CS50G+Games/courseware/67588b76ec534f7da0fa917fac4350b8/72c04e2f9eb24f6494ca99b582ae67ef/)
 
-## --Getting Started--
+## Getting Started
 Primeiros passos LÖVE
 [Getting Started](https://github.com/vnduda/Pong-game)
+
+## The day-0 update
+Base da janela do jogo e algumas funções de inicialização criadas
