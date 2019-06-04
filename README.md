@@ -7,3 +7,6 @@ Primeiros passos LÖVE
 
 ## The day-0 update
 Base da janela do jogo e algumas funções de inicialização criadas
+
+## The Low-Res Update
+Letras agora estão no estilo retrô (OBS: bug encontrado, ajustes serão feitos)
