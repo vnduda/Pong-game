@@ -9,7 +9,7 @@
 * Base da janela do jogo e algumas funções de inicialização criadas
 
 ## The Low-Res Update
-* Letras agora estão no estilo retrô (OBS: bug encontrado, ajustes serão feitos)
+* Letras agora estão no estilo retrô
 * [Biblioteca push](https://github.com/Ulydev/push)
 
 ## The Rectangle Update
