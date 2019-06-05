@@ -11,3 +11,8 @@
 ## The Low-Res Update
 * Letras agora estão no estilo retrô (OBS: bug encontrado, ajustes serão feitos)
 * [Biblioteca push](https://github.com/Ulydev/push)
+
+## The Rectangle Update
+* Agora a letra está padronizada em uma fonte
+* Hello Pong está no topo da tela
+* Adicionado as barras laterais e a bola
