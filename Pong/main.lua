@@ -1,6 +1,6 @@
 --[[
     Pong - 2
-    "The Rectangle Update"
+    "The Paddle Update"
 ]]
 
 -- push é uma biblioteca que nos permite desenhar nosso jogo
@@ -14,6 +14,9 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT = 243
 
+-- velocidade que vamos mover as barras
+PADDLE_SPEED = 200
+
 --[[
     Irá rodar quando o jogo 1 começar, apenas uma vez.
     love.load() é usado para inicializar o jogo no estado
@@ -26,6 +29,9 @@ function love.load()
     -- fonte que dá mais aspecto de retrô para qualquer texto
     smallFont = love.graphics.newFont('font.ttf', 8)
 
+    -- fonte maior para desenhar o placar
+    scoreFont = love.graphics.newFont('font.ttf', 32)
+
     -- define smallFont para todo objeto
     love.graphics.setFont(smallFont)
 
@@ -36,6 +42,38 @@ function love.load()
         resizable = false,
         vsync = true
     })
+
+  -- inicializa o placar e acompanha para mostrar o vencedor
+  player1Score = 0
+  player2Score = 0
+
+  -- posições das barras no eixo Y (elas só podem subir ou descer)
+  player1Y = 30
+  player2Y = VIRTUAL_HEIGHT - 50
+end
+
+--[[
+    Executa cada frame, com 'dt' passado, o nosso delta em segundos,
+    desde o último frame, que o LOVE2D fornece
+]]
+function love.update(dt)
+  -- movimento do player 1
+  if love.keyboard.isDown('w') then
+      -- adiciona velocidade negativa na barra ao Y atual dimensionado por DeltaTime (dt)
+      player1Y = player1Y + -PADDLE_SPEED * dt
+  elseif love.keyboard.isDown('s') then
+      -- adiciona velocidade positiva na barra ao Y atual dimensionado por DeltaTime (dt)
+      player1Y = player1Y + PADDLE_SPEED * dt
+  end
+
+  -- movimento do player 2
+  if love.keyboard.isDown('up') then
+      -- adiciona velocidade negativa na barra ao Y atual dimensionado por DeltaTime (dt)
+      player2Y = player2Y + -PADDLE_SPEED * dt
+  elseif love.keyboard.isDown('down') then
+      -- adiciona velocidade positiva na barra ao Y atual dimensionado por DeltaTime (dt)
+      player2Y = player2Y + PADDLE_SPEED * dt
+  end
 end
 
 --[[
@@ -43,7 +81,6 @@ end
     love.keypressed() função de retorno de chamada que é executada
     sempre que pressionamos uma tecla
 ]]
-
 function love.keypressed(key)
     if key == 'escape' then
         -- love.event.quit() finaliza a aplicação
@@ -70,7 +107,16 @@ function love.draw()
     love.graphics.clear(40, 45, 52, 255)
 
     -- agora desenha o texto de boas vindas no topo da tela
+    love.graphics.setFont(smallFont)
     love.graphics.printf('Hello Pong!', 0, 20, VIRTUAL_WIDTH, 'center')
+
+    -- desenha o placar direito e esquerdo da tecla
+    -- OBS: precisamos trocar a fonte para desenhar anter de printar
+    love.graphics.setFont(scoreFont)
+    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50,
+        VIRTUAL_HEIGHT / 3)
+    love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30,
+        VIRTUAL_HEIGHT / 3)
 
     -- Aqui começaremos a desenhar as barras , que são retângulos na tela em certos pontos
     -- assim como a bola
