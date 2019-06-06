@@ -16,3 +16,9 @@
 * Agora a letra está padronizada em uma fonte
 * Hello Pong está no topo da tela
 * Adicionado as barras laterais e a bola
+
+## The Paddle Update
+* Agora o jogo possui placar
+* Os players estão setados para começar com o placar = 0
+* Adicionada funções de movimentação dos players
+* Adicionada velocidade que as barras são movimentadas
