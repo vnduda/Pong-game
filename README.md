@@ -22,3 +22,8 @@
 * Os players estão setados para começar com o placar = 0
 * Adicionada funções de movimentação dos players
 * Adicionada velocidade que as barras são movimentadas
+
+## The Ball Update
+* Agora a bola tem velocidade definida e direção aleatória ao iniciar o jogo
+* Adicionado limite para que a bola não ultrapasse a borda
+* Agora quando apertamos enter o estado do jogo muda de Start State para Play State
