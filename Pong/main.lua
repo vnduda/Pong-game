@@ -1,6 +1,6 @@
 --[[
-    Pong - 2
-    "The Paddle Update"
+    Pong - 4
+    "The Ball Update"
 ]]
 
 -- push é uma biblioteca que nos permite desenhar nosso jogo
@@ -26,6 +26,9 @@ function love.load()
     -- evita o embaçamento do texto, deixando ele mais pixelado
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
+    -- gera o RNG para que as chamadas sejam sempre aleatórias
+    math.randomseed(os.time())
+
     -- fonte que dá mais aspecto de retrô para qualquer texto
     smallFont = love.graphics.newFont('font.ttf', 8)
 
@@ -50,6 +53,19 @@ function love.load()
   -- posições das barras no eixo Y (elas só podem subir ou descer)
   player1Y = 30
   player2Y = VIRTUAL_HEIGHT - 50
+
+  -- variáveis de velocidade e posição para a bola quando o jogo inicia
+  ballX = VIRTUAL_WIDTH / 2 - 2
+  ballY = VIRTUAL_HEIGHT / 2 - 2
+
+  -- função math.random retorna um valor aleatório entre o número da esquerda e da direita
+  ballDX = math.random(2) == 1 and 100 or -100
+  ballDY = math.random(-50, 50)
+
+  -- variável de estado do jogo que é usada para fazer a transição entre diferentes
+  -- partes do jogo (usada no início, menus, jogo principal etc)
+  -- usaremos para determinar o comportamento durante a renderização e atualização
+  gameState = 'start'
 end
 
 --[[
@@ -60,19 +76,31 @@ function love.update(dt)
   -- movimento do player 1
   if love.keyboard.isDown('w') then
       -- adiciona velocidade negativa na barra ao Y atual dimensionado por DeltaTime (dt)
-      player1Y = player1Y + -PADDLE_SPEED * dt
+      -- agora nós "apertamos" nossa posição entre os limites da tela
+      -- função math.max retorna o maior entre dois valores; 0 e o jogador Y
+      -- irá garantir que não iremos acima dele
+        player1Y = math.max(0, player1Y + -PADDLE_SPEED * dt)
   elseif love.keyboard.isDown('s') then
       -- adiciona velocidade positiva na barra ao Y atual dimensionado por DeltaTime (dt)
-      player1Y = player1Y + PADDLE_SPEED * dt
+      -- math.min retorna o menor de dois valores; parte inferior da borda menos a altura da barra
+      -- também vai garantir que não iremos abaixo dele
+      player1Y = math.min(VIRTUAL_HEIGHT - 20, player1Y + PADDLE_SPEED * dt)
   end
 
   -- movimento do player 2
   if love.keyboard.isDown('up') then
       -- adiciona velocidade negativa na barra ao Y atual dimensionado por DeltaTime (dt)
-      player2Y = player2Y + -PADDLE_SPEED * dt
+      player2Y = math.max(0, player2Y + -PADDLE_SPEED * dt)
   elseif love.keyboard.isDown('down') then
       -- adiciona velocidade positiva na barra ao Y atual dimensionado por DeltaTime (dt)
-      player2Y = player2Y + PADDLE_SPEED * dt
+      player2Y = math.min(VIRTUAL_HEIGHT - 20, player2Y + PADDLE_SPEED * dt)
+  end
+
+  -- atualiza nossa bola baseada no DX e DY apenas se estivermos no estado de jogar
+  -- dimensiona a velocidade por dt para que o movimento seja independentemente do framerate
+  if gameState == 'play' then
+      ballX = ballX + ballDX * dt
+      ballY = ballY + ballDY * dt
   end
 end
 
@@ -85,6 +113,22 @@ function love.keypressed(key)
     if key == 'escape' then
         -- love.event.quit() finaliza a aplicação
         love.event.quit()
+    -- se pressionarmos enter no estado inicial do jogo, entraremos em modo de jogo
+    -- durante o modo de jogo, a bola se moverá em uma direção aleatória
+    elseif key == 'enter' or key == 'return' then
+        if gameState == 'start' then
+            gameState = 'play'
+        else
+            gameState = 'start'
+
+            -- inicia a bola no meio da tela
+            ballX = VIRTUAL_WIDTH / 2 - 2
+            ballY = VIRTUAL_HEIGHT / 2 - 2
+
+            -- da um valor inicial aleatório a velocidade x e y da bola
+            ballDX = math.random(2) == 1 and 100 or -100
+            ballDY = math.random(-50, 50) * 1.5
+        end
     end
 end
 
@@ -108,15 +152,12 @@ function love.draw()
 
     -- agora desenha o texto de boas vindas no topo da tela
     love.graphics.setFont(smallFont)
-    love.graphics.printf('Hello Pong!', 0, 20, VIRTUAL_WIDTH, 'center')
 
-    -- desenha o placar direito e esquerdo da tecla
-    -- OBS: precisamos trocar a fonte para desenhar anter de printar
-    love.graphics.setFont(scoreFont)
-    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50,
-        VIRTUAL_HEIGHT / 3)
-    love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30,
-        VIRTUAL_HEIGHT / 3)
+    if gameState == 'start' then
+        love.graphics.printf('Hello Start State!', 0, 20, VIRTUAL_WIDTH, 'center')
+    else
+        love.graphics.printf('Hello Play State!', 0, 20, VIRTUAL_WIDTH, 'center')
+    end
 
     -- Aqui começaremos a desenhar as barras , que são retângulos na tela em certos pontos
     -- assim como a bola
