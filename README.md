@@ -27,3 +27,8 @@
 * Agora a bola tem velocidade definida e direção aleatória ao iniciar o jogo
 * Adicionado limite para que a bola não ultrapasse a borda
 * Agora quando apertamos enter o estado do jogo muda de Start State para Play State
+
+## The Class Update
+* Adicionado classes Ball e Paddle
+* Agora as barras e bola possuem movimentação
+* Adicionado Biblioteca Class
