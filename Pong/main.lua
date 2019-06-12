@@ -1,6 +1,6 @@
 --[[
-    Pong - 5
-    "The Class Update"
+    Pong - 6
+    "The FPS Update"
 ]]
 
 -- push é uma biblioteca que nos permite desenhar nosso jogo
@@ -39,11 +39,17 @@ function love.load()
     -- evita o embaçamento do texto, deixando ele mais pixelado
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
+    -- adiciona o título da nossa janela de aplicação
+    love.window.setTitle('Pong')
+
     -- gera o RNG para que as chamadas sejam sempre aleatórias
     math.randomseed(os.time())
 
     -- fonte que dá mais aspecto de retrô para qualquer texto
     smallFont = love.graphics.newFont('font.ttf', 8)
+
+    -- fonte maior para o placar
+    scoreFont = love.graphics.newFont('font.ttf', 32)
 
     -- define smallFont para todo objeto
     love.graphics.setFont(smallFont)
@@ -55,6 +61,10 @@ function love.load()
         resizable = false,
         vsync = true
     })
+
+  -- inicializa as variaveis do placar
+  player1Score = 0
+  player2Score = 0
 
   -- inicializa as barras dos jogadores, faz delas globais, para servem
   -- detectadas por outras funções e módulos
@@ -153,6 +163,13 @@ function love.draw()
         love.graphics.printf('Hello Play State!', 0, 20, VIRTUAL_WIDTH, 'center')
     end
 
+    -- desenha o placar no centro da tela
+    love.graphics.setFont(scoreFont)
+    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50,
+        VIRTUAL_HEIGHT / 3)
+    love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30,
+        VIRTUAL_HEIGHT / 3)
+
     -- renderiza as barras, agora usando o método de sua classe
     player1:render()
     player2:render()
@@ -160,6 +177,19 @@ function love.draw()
     -- renderiza a bola, agora usando o método de sua classe
     ball:render()
 
+    -- nova função que demonstra como ver o FPS
+    displayFPS()
+
     -- termina a renderização
     push:apply('end')
 end
+
+--[[
+    Renderiza o FPS
+]]
+function displayFPS()
+      -- exibição simples de FPS em todos os estados
+      love.graphics.setFont(smallFont)
+      love.graphics.setColor(0, 255, 0, 255)
+      love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
+  end
