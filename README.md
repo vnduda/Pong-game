@@ -32,3 +32,7 @@
 * Adicionado classes Ball e Paddle
 * Agora as barras e bola possuem movimentação
 * Adicionado Biblioteca Class
+
+# The FPS Update
+* Adicionado FPS para monitorar a aplicação
+* Melhora no título do jogo, mais polido
